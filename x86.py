@@ -721,8 +721,8 @@ class cpu:
         interrupt = self.setint(intfreq, intrand)
         icount    = 0
 
-        self.print(_headers(procs))
-        self.print(_trace(True))
+        self.print_headers(procs)
+        self.print_trace(True)
         
         while True:
             # need thread ID of current process
@@ -738,7 +738,7 @@ class cpu:
             rc = eval(instruction)
 
             # tracing details: ALWAYS AFTER EXECUTION OF INSTRUCTION
-            self.print(_trace(False))
+            self.print_trace(False)
 
             # output: thread-proportional spacing followed by PC and instruction
             dospace(tid)
@@ -753,7 +753,7 @@ class cpu:
                 procs.next()
                 procs.restore()
 
-                self.print(_trace(False))
+                self.print_trace(False)
                 for i in range(procs.getnum()):
                     print( '----- Halt;Switch ----- '),
                 print( '')
@@ -766,7 +766,7 @@ class cpu:
                 procs.next()
                 procs.restore()
 
-                self.print(_trace(False))
+                self.print_trace(False)
                 for i in range(procs.getnum()):
                     print( '------ Interrupt ------ '),
                 print( '')
