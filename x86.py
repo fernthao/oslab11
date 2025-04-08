@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 import sys
 import time
@@ -10,12 +10,12 @@ from optparse import OptionParser
 #
 def dospace(howmuch):
     for i in range(howmuch):
-        print '%24s' % ' ',
+        print( '%24s' % ' '),
 
 # useful instead of assert
 def zassert(cond, str):
     if cond == False:
-        print 'ABORT::', str
+        print( 'ABORT::', str)
         exit(1)
     return
 
@@ -101,10 +101,10 @@ class cpu:
             self.registers[i] = 0
 
     def dump_memory(self):
-        print 'MEMORY DUMP'
+        print( 'MEMORY DUMP')
         for i in range(self.max_memory):
             if i not in self.pmemory and i in self.memory and self.memory[i] != 0:
-                print '  m[%d]' % i, self.memory[i]
+                print( '  m[%d]' % i, self.memory[i])
 
     #
     # INFORMING ABOUT THE HARDWARE
@@ -161,14 +161,14 @@ class cpu:
         return 0
 
     def rdump(self):
-        print 'REGISTERS::',
-        print 'ax:', self.registers[self.REG_AX], 
-        print 'bx:', self.registers[self.REG_BX], 
-        print 'cx:', self.registers[self.REG_CX], 
-        print 'dx:', self.registers[self.REG_DX],
+        print( 'REGISTERS::'),
+        print( 'ax:', self.registers[self.REG_AX]), 
+        print( 'bx:', self.registers[self.REG_BX]), 
+        print( 'cx:', self.registers[self.REG_CX]), 
+        print( 'dx:', self.registers[self.REG_DX]),
 
     def mdump(self, index):
-        print 'm[%d] ' % index, self.memory[index]
+        print( 'm[%d] ' % index, self.memory[index])
 
     def move_i_to_r(self, src, dst):
         self.registers[dst] = src
@@ -182,7 +182,7 @@ class cpu:
 
     def move_m_to_r(self, value, reg1, reg2, dst):
         tmp = value + self.registers[reg1] + self.registers[reg2]
-        # print 'doing mov', 'val:', value, 'r1:', self.get_regname(reg1), self.registers[reg1], 'r2:', self.get_regname(reg2), self.registers[reg2], 'dst', self.get_regname(dst), 'tmp', tmp, 'reg[dst]', self.registers[dst], 'mem', self.memory[tmp]
+        # print( 'doing mov', 'val:', value, 'r1:', self.get_regname(reg1), self.registers[reg1], 'r2:', self.get_regname(reg2), self.registers[reg2], 'dst', self.get_regname(dst), 'tmp', tmp, 'reg[dst]', self.registers[dst], 'mem', self.memory[tmp]
         self.registers[dst] = self.memory[tmp] 
 
     def move_r_to_m(self, src, value, reg1, reg2):
@@ -316,7 +316,7 @@ class cpu:
         return 0
 
     def push_m(self, value, reg1, reg2):
-        # print 'push_m', value, reg1, reg2
+        # print( 'push_m', value, reg1, reg2
         self.registers[self.REG_SP] -= 4
         tmp = value + self.registers[reg1] + self.registers[reg2]
         # push address onto stack, not memory value itself
@@ -372,7 +372,7 @@ class cpu:
             return targ, 'TYPE_LABEL'
         elif tmp[0].isalpha() and not tmp[0].isdigit():
             zassert(tmp in self.vars, 'Variable %s is not declared' % tmp)
-            # print '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
+            # print( '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
             return '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
         elif tmp[0].isdigit() or tmp[0] == '-':
             # MOST GENERAL CASE: number(reg,reg) or number(reg)
@@ -384,22 +384,22 @@ class cpu:
             s = tmp.split('(')
             if len(s) == 1:
                 value = neg * int(tmp)
-                # print '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
+                # print( '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
                 return '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
             elif len(s) == 2:
                 value = neg * int(s[0])
                 t = s[1].split(')')[0].split(',')
                 if len(t) == 1:
                     register = t[0].split('%')[1]
-                    # print '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY'
+                    # print( '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY'
                     return '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY'
                 elif len(t) == 2:
                     register1 = t[0].split('%')[1]
                     register2 = t[1].split('%')[1]
-                    # print '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY'
+                    # print( '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY'
                     return '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY'
             else:
-                print 'mov: bad argument [%s]' % tmp
+                print( 'mov: bad argument [%s]' % tmp)
                 exit(1)
                 return
         zassert(True, 'mov: bad argument [%s]' % arg)
@@ -418,7 +418,7 @@ class cpu:
 
         for line in fd:
             cline = line.rstrip()
-            # print 'PASS 1', cline
+            # print( 'PASS 1', cline
 
             # remove everything after the comment marker
             ctmp = cline.split('#')
@@ -438,23 +438,23 @@ class cpu:
                 self.vars[tmp[1]] = data
                 data += 4
                 zassert(data < bpc, 'Load address overrun by static data')
-                if self.verbose: print 'ASSIGN VAR', tmp[0], "-->", tmp[1], self.vars[tmp[1]]
+                if self.verbose: print( 'ASSIGN VAR', tmp[0], "-->", tmp[1], self.vars[tmp[1]])
             elif tmp[0][0] == '.':
                 assert(len(tmp) == 1)
                 self.labels[tmp[0]] = int(pc)
-                if self.verbose: print 'ASSIGN LABEL', tmp[0], "-->", pc
+                if self.verbose: print( 'ASSIGN LABEL', tmp[0], "-->", pc)
             else:
                 pc += 1
         fd.close()
 
-        if self.verbose: print ''
+        if self.verbose: print( '')
 
         # second pass: do everything else
         pc = int(loadaddr)
         fd = open(infile)
         for line in fd:
             cline = line.rstrip()
-            # print 'PASS 2', cline
+            # print( 'PASS 2', cline
 
             # remove everything after the comment marker
             ctmp = cline.split('#')
@@ -481,12 +481,12 @@ class cpu:
                     arg2 = rtmp[1].strip()
                     (src, stype) = self.getarg(arg1)
                     (dst, dtype) = self.getarg(arg2)
-                    # print 'MOV', src, stype, dst, dtype
+                    # print( 'MOV', src, stype, dst, dtype
                     if stype == 'TYPE_MEMORY' and dtype == 'TYPE_MEMORY':
-                        print 'bad mov: two memory arguments'
+                        print( 'bad mov: two memory arguments')
                         exit(1)
                     elif stype == 'TYPE_IMMEDIATE' and dtype == 'TYPE_IMMEDIATE':
-                        print 'bad mov: two immediate arguments'
+                        print( 'bad mov: two immediate arguments')
                         exit(1)
                     elif stype == 'TYPE_IMMEDIATE' and dtype == 'TYPE_REGISTER':
                         self.memory[pc]  = 'self.move_i_to_r(%d, %d)' % (int(src), dst)
@@ -643,40 +643,40 @@ class cpu:
                 elif opcode == 'mdump':
                     self.memory[pc] = 'self.mdump(%s)' % tmp[1]
                 else:
-                    print 'illegal opcode: ', opcode
+                    print( 'illegal opcode: ', opcode)
                     exit(1)
 
-                if self.verbose: print 'pc:%d LOADING %20s --> %s' % (pc, self.pmemory[pc], self.memory[pc])
+                if self.verbose: print( 'pc:%d LOADING %20s --> %s' % (pc, self.pmemory[pc], self.memory[pc]))
                 
                 # INCREMENT PC for loader
                 pc += 1
         # END: loop over file
         fd.close()
-        if self.verbose: print ''
+        if self.verbose: print( '')
         return
     # END: load
 
     def print_headers(self, procs):
-        # print some headers
+        # print( some headers
         if len(self.memtrace) > 0:
             for m in self.memtrace:
                 if m[0].isdigit():
-                    print '%5d' % int(m),
+                    print( '%5d' % int(m)),
                 else:
                     zassert(m in self.vars, 'Traced variable %s not declared' % m)
-                    print '%5s' % m,
-            print ' ',
+                    print( '%5s' % m),
+            print( ' '),
         if len(self.regtrace) > 0:
             for r in self.regtrace:
-                print '%5s' % self.get_regname(r),
-            print ' ',
+                print( '%5s' % self.get_regname(r)),
+            print( ' '),
         if cctrace == True:
-            print '>= >  <= <  != ==', 
+            print( '>= >  <= <  != =='), 
 
         # and per thread
         for i in range(procs.getnum()):
-            print '       Thread %d        ' % i,
-        print ''
+            print( '       Thread %d        ' % i),
+        print( '')
         return
 
     def print_trace(self, newline):
@@ -684,31 +684,31 @@ class cpu:
             for m in self.memtrace:
                 if self.compute:
                     if m[0].isdigit():
-                        print '%5d' % self.memory[int(m)],
+                        print( '%5d' % self.memory[int(m)]),
                     else:
                         zassert(m in self.vars, 'Traced variable %s not declared' % m)
-                        print '%5d' % self.memory[self.vars[m]],
+                        print( '%5d' % self.memory[self.vars[m]]),
                 else:
-                    print '%5s' % '?',
-            print ' ',
+                    print( '%5s' % '?'),
+            print( ' '),
         if len(self.regtrace) > 0:
             for r in self.regtrace:
                 if self.compute:
-                    print '%5d' % self.registers[r],
+                    print( '%5d' % self.registers[r]),
                 else:
-                    print '%5s' % '?',
-            print ' ',
+                    print( '%5s' % '?'),
+            print( ' '),
         if cctrace == True:
             for c in self.condlist:
                 if self.compute:
                     if self.conditions[c]:
-                        print '1 ',
+                        print( '1 '),
                     else:
-                        print '0 ',
+                        print( '0 '),
                 else:
-                    print '? ',
+                    print( '? '),
         if (len(self.memtrace) > 0 or len(self.regtrace) > 0 or cctrace == True) and newline == True:
-            print ''
+            print( '')
         return
 
     def setint(self, intfreq, intrand):
@@ -721,8 +721,8 @@ class cpu:
         interrupt = self.setint(intfreq, intrand)
         icount    = 0
 
-        self.print_headers(procs)
-        self.print_trace(True)
+        self.print(_headers(procs))
+        self.print(_trace(True))
         
         while True:
             # need thread ID of current process
@@ -738,11 +738,11 @@ class cpu:
             rc = eval(instruction)
 
             # tracing details: ALWAYS AFTER EXECUTION OF INSTRUCTION
-            self.print_trace(False)
+            self.print(_trace(False))
 
             # output: thread-proportional spacing followed by PC and instruction
             dospace(tid)
-            print prevPC, self.pmemory[prevPC]
+            print( prevPC, self.pmemory[prevPC])
             icount += 1
 
             # halt instruction issued
@@ -753,10 +753,10 @@ class cpu:
                 procs.next()
                 procs.restore()
 
-                self.print_trace(False)
+                self.print(_trace(False))
                 for i in range(procs.getnum()):
-                    print '----- Halt;Switch ----- ',
-                print ''
+                    print( '----- Halt;Switch ----- '),
+                print( '')
 
             # do interrupt processing
             interrupt -= 1
@@ -766,10 +766,10 @@ class cpu:
                 procs.next()
                 procs.restore()
 
-                self.print_trace(False)
+                self.print(_trace(False))
                 for i in range(procs.getnum()):
-                    print '------ Interrupt ------ ',
-                print ''
+                    print( '------ Interrupt ------ '),
+                print( '')
         # END: while
         return
 
@@ -849,7 +849,7 @@ class process:
 
         # stack
         self.regs[self.cpu.get_regnum('sp')] = stackbottom
-        # print 'REG', self.cpu.get_regnum('sp'), self.regs[self.cpu.get_regnum('sp')]
+        # print( 'REG', self.cpu.get_regnum('sp'), self.regs[self.cpu.get_regnum('sp')]
 
         return
 
@@ -895,25 +895,25 @@ parser.add_option('-M', '--memtrace',  default='',         help='comma-separated
 parser.add_option('-R', '--regtrace',  default='',         help='comma-separated list of regs to trace (e.g., ax,bx,cx,dx)',  action='store',
                   type='string', dest='regtrace')
 parser.add_option('-C', '--cctrace',   default=False,      help='should we trace condition codes',  action='store_true', dest='cctrace')
-parser.add_option('-S', '--printstats',default=False,      help='print some extra stats',           action='store_true', dest='printstats')
-parser.add_option('-v', '--verbose',   default=False,      help='print some extra info',            action='store_true', dest='verbose')
+parser.add_option('-S', '--print(stats',default=False,      help='print( some extra stats',           action='store_true', dest='print(stats')
+parser.add_option('-v', '--verbose',   default=False,      help='print( some extra info',            action='store_true', dest='verbose')
 parser.add_option('-c', '--compute',   default=False,      help='compute answers for me',           action='store_true', dest='solve')
 (options, args) = parser.parse_args()
 
-print 'ARG seed',                options.seed
-print 'ARG numthreads',          options.numthreads
-print 'ARG program',             options.progfile
-print 'ARG interrupt frequency', options.intfreq
-print 'ARG interrupt randomness',options.intrand
-print 'ARG argv',                options.argv
-print 'ARG load address',        options.loadaddr
-print 'ARG memsize',             options.memsize
-print 'ARG memtrace',            options.memtrace
-print 'ARG regtrace',            options.regtrace
-print 'ARG cctrace',             options.cctrace
-print 'ARG printstats',          options.printstats
-print 'ARG verbose',             options.verbose
-print ''
+print( 'ARG seed',                options.seed)
+print( 'ARG numthreads',          options.numthreads)
+print( 'ARG program',             options.progfile)
+print( 'ARG interrupt frequency', options.intfreq)
+print( 'ARG interrupt randomness',options.intrand)
+print( 'ARG argv',                options.argv)
+print( 'ARG load address',        options.loadaddr)
+print( 'ARG memsize',             options.memsize)
+print( 'ARG memtrace',            options.memtrace)
+print( 'ARG regtrace',            options.regtrace)
+print( 'ARG cctrace',             options.cctrace)
+print( 'ARG print(stats',          options.printstats)
+print( 'ARG verbose',             options.verbose)
+print( '')
 
 seed       = int(options.seed)
 numthreads = int(options.numthreads)
@@ -977,9 +977,9 @@ ic = cpu.run(procs, intfreq, intrand)
 t2 = time.clock()
 
 if printstats:
-    print ''
-    print 'STATS:: Instructions    %d' % ic
-    print 'STATS:: Emulation Rate  %.2f kinst/sec' % (float(ic) / float(t2 - t1) / 1000.0)
+    print( '')
+    print( 'STATS:: Instructions    %d' % ic)
+    print( 'STATS:: Emulation Rate  %.2f kinst/sec' % (float(ic) / float(t2 - t1) / 1000.0))
 
 # use this for profiling
 # import cProfile
