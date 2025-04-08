@@ -182,7 +182,7 @@ class cpu:
 
     def move_m_to_r(self, value, reg1, reg2, dst):
         tmp = value + self.registers[reg1] + self.registers[reg2]
-        # print( 'doing mov', 'val:', value, 'r1:', self.get_regname(reg1), self.registers[reg1], 'r2:', self.get_regname(reg2), self.registers[reg2], 'dst', self.get_regname(dst), 'tmp', tmp, 'reg[dst]', self.registers[dst], 'mem', self.memory[tmp]
+        # print( 'doing mov', 'val:', value, 'r1:', self.get_regname(reg1), self.registers[reg1], 'r2:', self.get_regname(reg2), self.registers[reg2], 'dst', self.get_regname(dst), 'tmp', tmp, 'reg[dst]', self.registers[dst], 'mem', self.memory[tmp])
         self.registers[dst] = self.memory[tmp] 
 
     def move_r_to_m(self, src, value, reg1, reg2):
@@ -316,7 +316,7 @@ class cpu:
         return 0
 
     def push_m(self, value, reg1, reg2):
-        # print( 'push_m', value, reg1, reg2
+        # print( 'push_m', value, reg1, reg2)
         self.registers[self.REG_SP] -= 4
         tmp = value + self.registers[reg1] + self.registers[reg2]
         # push address onto stack, not memory value itself
@@ -372,7 +372,7 @@ class cpu:
             return targ, 'TYPE_LABEL'
         elif tmp[0].isalpha() and not tmp[0].isdigit():
             zassert(tmp in self.vars, 'Variable %s is not declared' % tmp)
-            # print( '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
+            # print( '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY')
             return '%d,%d,%d' % (self.vars[tmp], self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
         elif tmp[0].isdigit() or tmp[0] == '-':
             # MOST GENERAL CASE: number(reg,reg) or number(reg)
@@ -384,19 +384,19 @@ class cpu:
             s = tmp.split('(')
             if len(s) == 1:
                 value = neg * int(tmp)
-                # print( '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
+                # print( '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY')
                 return '%d,%d,%d' % (int(value), self.register_translate('zero'), self.register_translate('zero')), 'TYPE_MEMORY'
             elif len(s) == 2:
                 value = neg * int(s[0])
                 t = s[1].split(')')[0].split(',')
                 if len(t) == 1:
                     register = t[0].split('%')[1]
-                    # print( '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY'
+                    # print( '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY')
                     return '%d,%d,%d' % (int(value), self.register_translate(register), self.register_translate('zero')), 'TYPE_MEMORY'
                 elif len(t) == 2:
                     register1 = t[0].split('%')[1]
                     register2 = t[1].split('%')[1]
-                    # print( '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY'
+                    # print( '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY')
                     return '%d,%d,%d' % (int(value), self.register_translate(register1), self.register_translate(register2)), 'TYPE_MEMORY'
             else:
                 print( 'mov: bad argument [%s]' % tmp)
@@ -418,7 +418,7 @@ class cpu:
 
         for line in fd:
             cline = line.rstrip()
-            # print( 'PASS 1', cline
+            # print( 'PASS 1', cline)
 
             # remove everything after the comment marker
             ctmp = cline.split('#')
@@ -454,7 +454,7 @@ class cpu:
         fd = open(infile)
         for line in fd:
             cline = line.rstrip()
-            # print( 'PASS 2', cline
+            # print( 'PASS 2', cline)
 
             # remove everything after the comment marker
             ctmp = cline.split('#')
@@ -657,7 +657,7 @@ class cpu:
     # END: load
 
     def print_headers(self, procs):
-        # print( some headers
+        # print( some headers)
         if len(self.memtrace) > 0:
             for m in self.memtrace:
                 if m[0].isdigit():
@@ -895,7 +895,7 @@ parser.add_option('-M', '--memtrace',  default='',         help='comma-separated
 parser.add_option('-R', '--regtrace',  default='',         help='comma-separated list of regs to trace (e.g., ax,bx,cx,dx)',  action='store',
                   type='string', dest='regtrace')
 parser.add_option('-C', '--cctrace',   default=False,      help='should we trace condition codes',  action='store_true', dest='cctrace')
-parser.add_option('-S', '--print(stats',default=False,      help='print( some extra stats',           action='store_true', dest='print(stats')
+parser.add_option('-S', '--printstats',default=False,      help='print( some extra stats',           action='store_true', dest='printstats')
 parser.add_option('-v', '--verbose',   default=False,      help='print( some extra info',            action='store_true', dest='verbose')
 parser.add_option('-c', '--compute',   default=False,      help='compute answers for me',           action='store_true', dest='solve')
 (options, args) = parser.parse_args()
@@ -911,7 +911,7 @@ print( 'ARG memsize',             options.memsize)
 print( 'ARG memtrace',            options.memtrace)
 print( 'ARG regtrace',            options.regtrace)
 print( 'ARG cctrace',             options.cctrace)
-print( 'ARG print(stats',          options.printstats)
+print( 'ARG printstats',          options.printstats)
 print( 'ARG verbose',             options.verbose)
 print( '')
 
